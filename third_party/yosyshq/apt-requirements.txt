@@ -1,0 +1,13 @@
+bison
+flex
+libreadline-dev
+gawk
+tcl-dev
+libffi-dev
+graphviz
+xdot
+pkg-config
+libboost-system-dev
+libboost-python-dev
+libboost-filesystem-dev
+zlib1g-dev

@@ -4,7 +4,15 @@
 
 workspace(name="hurt")
 
+load("//third_party/bazel:repos.bzl", "bazel_repos")
+bazel_repos()
+load("//third_party/bazel:deps.bzl", "bazel_deps")
+bazel_deps()
+
 load("//third_party/lowrisc:repos.bzl", "lowrisc_repos")
 lowrisc_repos()
 load("//third_party/lowrisc:deps.bzl", "lowrisc_deps")
 lowrisc_deps()
+
+load("//third_party/yosyshq:repos.bzl", "yosyshq_src_repos")
+yosyshq_src_repos()

@@ -1,0 +1,27 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_foreign_cc//foreign_cc:make.bzl", "make")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)
+
+#filegroup(
+#    name = "gen_dir",
+#    srcs = [":nextpnr"],
+#    output_group = "gen_dir",
+#)
+#
+#pkg_tar(
+#    name = "nextpnr-binaries",
+#    srcs = [":gen_dir"],
+#    extension = "tar.xz",
+#    package_dir = "nextpnr",
+#    #strip_prefix = "external/nextpnr_src/copy_nextpnr/nextpnr",
+#)

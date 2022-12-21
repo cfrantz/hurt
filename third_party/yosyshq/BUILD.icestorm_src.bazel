@@ -1,0 +1,35 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_foreign_cc//foreign_cc:make.bzl", "make")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)
+
+make(
+    name = "icestorm",
+    copts = [
+        "-Dredacted=\\\"redacted\\\"",
+    ],
+    lib_source = ":all_srcs",
+)
+
+filegroup(
+    name = "gen_dir",
+    srcs = [":icestorm"],
+    output_group = "gen_dir",
+)
+
+pkg_tar(
+    name = "icestorm-binaries",
+    srcs = [":gen_dir"],
+    extension = "tar.xz",
+    package_dir = "icestorm",
+    #strip_prefix = "external/icestorm_src/copy_icestorm/icestorm",
+)

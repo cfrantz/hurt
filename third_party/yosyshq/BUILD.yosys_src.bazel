@@ -1,0 +1,39 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_foreign_cc//foreign_cc:make.bzl", "make")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)
+
+make(
+    name = "yosys",
+    copts = [
+        "-Dredacted=\\\"redacted\\\"",
+    ],
+    args = [
+        "CONFIG=gcc",
+    ],
+    tags = ["requires-network"],
+    lib_source = ":all_srcs",
+)
+
+filegroup(
+    name = "gen_dir",
+    srcs = [":yosys"],
+    output_group = "gen_dir",
+)
+
+pkg_tar(
+    name = "yosys-binaries",
+    srcs = [":gen_dir"],
+    extension = "tar.xz",
+    package_dir = "yosys",
+    #strip_prefix = "external/yosys_src/copy_yosys/yosys",
+)
