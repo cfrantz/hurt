@@ -1,0 +1,26 @@
+diff --git a/abc/src/base/cmd/cmdUtils.c b/abc/src/base/cmd/cmdUtils.c
+index 0759ca9c..0afd9eb7 100644
+--- a/abc/src/base/cmd/cmdUtils.c
++++ b/abc/src/base/cmd/cmdUtils.c
+@@ -593,7 +593,7 @@ void CmdCommandPrint( Abc_Frame_t * pAbc, int fPrintAll, int fDetails )
+     nColumns = 79 / (LenghtMax + 2);
+ 
+     // print the starting message 
+-    fprintf( pAbc->Out, "      Welcome to ABC compiled on %s %s!", __DATE__, __TIME__ );
++    fprintf( pAbc->Out, "      Welcome to ABC compiled on %s %s!", "redacted", "redacted" );
+ 
+     // print the command by group
+     sGroupCur = NULL;
+diff --git a/abc/src/base/main/mainUtils.c b/abc/src/base/main/mainUtils.c
+index 377299fd..8d8cf029 100644
+--- a/abc/src/base/main/mainUtils.c
++++ b/abc/src/base/main/mainUtils.c
+@@ -56,7 +56,7 @@ char * Abc_UtilsGetVersion( Abc_Frame_t * pAbc )
+     #pragma GCC diagnostic push
+     #pragma GCC diagnostic ignored "-Wdate-time"
+ #endif
+-    sprintf(Version, "%s (compiled %s %s)", ABC_VERSION, __DATE__, __TIME__);
++    sprintf(Version, "%s (compiled %s %s)", ABC_VERSION, "redacted", "redacted");
+ #if __GNUC__
+     #pragma GCC diagnostic pop
+ #endif

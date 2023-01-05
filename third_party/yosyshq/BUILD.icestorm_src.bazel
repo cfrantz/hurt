@@ -18,6 +18,27 @@ make(
         "-Dredacted=\\\"redacted\\\"",
     ],
     lib_source = ":all_srcs",
+    out_binaries = [
+        "icebox_asc2hlc",
+        "icebox_chipdb",
+        "icebox_colbuf",
+        "iceboxdb.py",
+        "icebox_diff",
+        "icebox_explain",
+        "icebox_hlc2asc",
+        "icebox_html",
+        "icebox_maps",
+        "icebox.py",
+        "icebox_stat",
+        "icebox_vlog",
+        "icebram",
+        "icemulti",
+        "icepack",
+        "icepll",
+        "iceprog",
+        "icetime",
+        "iceunpack",
+    ],
 )
 
 filegroup(
@@ -30,6 +51,5 @@ pkg_tar(
     name = "icestorm-binaries",
     srcs = [":gen_dir"],
     extension = "tar.xz",
-    package_dir = "icestorm",
-    #strip_prefix = "external/icestorm_src/copy_icestorm/icestorm",
+    strip_prefix = "external/icestorm_src/copy_icestorm",
 )

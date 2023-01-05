@@ -14,14 +14,23 @@ filegroup(
 
 make(
     name = "yosys",
+    args = [
+        "CONFIG=gcc",
+        "ABCREV=default",
+        "ABCPULL=0",
+    ],
     copts = [
         "-Dredacted=\\\"redacted\\\"",
     ],
-    args = [
-        "CONFIG=gcc",
-    ],
-    tags = ["requires-network"],
     lib_source = ":all_srcs",
+    out_binaries = [
+        "yosys",
+        "yosys-abc",
+        "yosys-config",
+        "yosys-filterlib",
+        "yosys-smtbmc",
+        "yosys-witness",
+    ],
 )
 
 filegroup(
@@ -34,6 +43,5 @@ pkg_tar(
     name = "yosys-binaries",
     srcs = [":gen_dir"],
     extension = "tar.xz",
-    package_dir = "yosys",
-    #strip_prefix = "external/yosys_src/copy_yosys/yosys",
+    strip_prefix = "external/yosys_src/copy_yosys",
 )

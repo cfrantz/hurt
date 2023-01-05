@@ -4,7 +4,7 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("@rules_foreign_cc//foreign_cc:make.bzl", "make")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 filegroup(
@@ -12,16 +12,31 @@ filegroup(
     srcs = glob(["**"]),
 )
 
-#filegroup(
-#    name = "gen_dir",
-#    srcs = [":nextpnr"],
-#    output_group = "gen_dir",
-#)
-#
-#pkg_tar(
-#    name = "nextpnr-binaries",
-#    srcs = [":gen_dir"],
-#    extension = "tar.xz",
-#    package_dir = "nextpnr",
-#    #strip_prefix = "external/nextpnr_src/copy_nextpnr/nextpnr",
-#)
+cmake(
+    name = "trellis",
+    cache_entries = {
+        "CURRENT_GIT_VERSION": "35f5aff",
+    },
+    lib_source = ":all_srcs",
+    out_binaries = [
+        "ecpbram",
+        "ecpmulti",
+        "ecppack",
+        "ecppll",
+        "ecpunpack",
+    ],
+    working_directory = "libtrellis",
+)
+
+filegroup(
+    name = "gen_dir",
+    srcs = [":trellis"],
+    output_group = "gen_dir",
+)
+
+pkg_tar(
+    name = "trellis-binaries",
+    srcs = [":gen_dir"],
+    extension = "tar.xz",
+    strip_prefix = "external/trellis_src/copy_trellis",
+)

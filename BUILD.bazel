@@ -5,6 +5,27 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@lowrisc_bazel_release//release:release.bzl", "release")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_pkg//pkg:mappings.bzl", "REMOVE_BASE_DIRECTORY", "pkg_files")
+
+pkg_files(
+    name = "yosyshq",
+    srcs = [
+        "@icestorm_src//:gen_dir",
+        "@nextpnr_src//:gen_dir",
+        "@trellis_src//:gen_dir",
+        "@yosys_src//:gen_dir",
+    ],
+    prefix = "yosyshq",
+)
+
+pkg_tar(
+    name = "yosyshq-tools",
+    srcs = [
+        ":yosyshq",
+    ],
+    extension = "tar.xz",
+)
 
 release(
     name = "release",
