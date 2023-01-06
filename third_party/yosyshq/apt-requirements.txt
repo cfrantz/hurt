@@ -10,6 +10,9 @@ pkg-config
 libeigen3-dev
 libboost-iostreams-dev
 libboost-system-dev
+libboost-thread-dev
+libboost-program-options-dev
 libboost-python-dev
 libboost-filesystem-dev
+libftdi-dev
 zlib1g-dev

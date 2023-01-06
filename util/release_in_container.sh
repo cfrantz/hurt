@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 : ${REMOVE:=--rm}
-: ${IMAGE:=ubuntu:20.04}
+: ${IMAGE:=ubuntu:22.04}
 
 if [[ -z "${DOCKER+is_set}" ]]; then
     if [[ -x /usr/bin/docker ]]; then
@@ -51,6 +51,6 @@ ${DOCKER} run \
         done) && \
         git config --global user.name \"${GIT_USER_NAME}\" && \
         git config --global user.email \"${GIT_USER_EMAIL}\" && \
-        ./bazelisk.sh run :release -- $@; \
+        ./bazelisk.sh run //release:release -- $@; \
         exec bash -i
     "
