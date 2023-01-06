@@ -1,0 +1,52 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("//verilog/private:toolchain.bzl", "VERILOG_TOOLCHAIN", "verilog_tool", "verilog_toolchain")
+load(":implementation.bzl", "yosys_ice40_helper")
+
+yosys_ice40_helper(
+    name = "helper",
+)
+
+verilog_tool(
+    name = "yosys",
+    binary = "@yosyshq//:yosys_bin",
+    deps = ["@yosyshq//:yosys_files"],
+)
+
+verilog_tool(
+    name = "nextpnr",
+    binary = "@yosyshq//:nextpnr_ice40",
+)
+
+verilog_tool(
+    name = "icepack",
+    binary = "@yosyshq//:icepack_bin",
+    deps = ["@yosyshq//:icestorm_files"],
+)
+
+verilog_toolchain(
+    name = "ice40_impl",
+    helper = ":helper",
+    tools = [
+        ":icepack",
+        ":nextpnr",
+        ":yosys",
+    ],
+)
+
+toolchain(
+    name = "ice40",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "//fpga/lattice:ice40",
+    ],
+    toolchain = ":ice40_impl",
+    toolchain_type = VERILOG_TOOLCHAIN,
+)

@@ -1,0 +1,16 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("//verilog:verilog.bzl", "verilog_bitstream")
+
+verilog_bitstream(
+    name = "larsen",
+    srcs = ["larsen.v"],
+    constraints = "pinmap_ice40_hx8k_evb.pcf",
+    device = "hx8k",
+    package = "ct256",
+    top = "top",
+)

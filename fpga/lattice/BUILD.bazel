@@ -1,0 +1,26 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+constraint_value(
+    name = "ice40",
+    constraint_setting = "//fpga:family",
+)
+
+constraint_value(
+    name = "ecp5",
+    constraint_setting = "//fpga:family",
+)
+
+# TODO: should this be chips as platforms?
+# Consider a "device" struct that encodes other interesting data about
+# each chip.  Perhaps also need a chip constraint and register a toolchain
+# per chip and attach relevant device into to the toolchain.
+platform(
+    name = "hx8k",
+    constraint_values = [
+        ":ice40",
+    ],
+)
