@@ -15,8 +15,8 @@ pkg_tar(
         "@trellis_src//:gen_dir",
         "@yosys_src//:gen_dir",
     ],
-    package_dir = "yosyshq",
     extension = "tar.xz",
+    package_dir = "yosyshq",
 )
 
 release(
@@ -25,28 +25,28 @@ release(
         ":yosyshq-tools": "Yosys Open Source FPGA toolchain",
     },
     # TODO: Not ready for repository file templating yet.
-#    env = {
-#        "BASE_URL": "https://github.com/cfrantz/hurt",
-#    },
-#    script = """(
-#        cd "${BUILD_WORKSPACE_DIRECTORY}"
-#
-#        # TODO(cfrantz): update this for releasing tools binaries tied to
-#        # the release.
-#
-#        # Apparently envsubst can't handle bash arrays or dicts.
-#        SHA256=${DIGEST[cc65-binaries.tar.xz]} envsubst \
-#                <toolchains/foo/repository.bzl.template \
-#                >toolchains/foo/repository.bzl
-#
-#        # Update modified hashes.
-#        git commit -m "Update tags and hashes for ${RELEASE_TAG}" \
-#                toolchains/foo/repository.bzl
-#
-#        # Move the tag after the commit.
-#        git tag -f "${RELEASE_TAG}"
-#
-#        # Push the updated commit and tag to the remote.
-#        git push --atomic "${REMOTE}" "${BRANCH}" "${RELEASE_TAG}"
-#    )""",
+    #env = {
+    #    "BASE_URL": "https://github.com/cfrantz/hurt",
+    #},
+    #script = """(
+    #    cd "${BUILD_WORKSPACE_DIRECTORY}"
+    #
+    #    # TODO(cfrantz): update this for releasing tools binaries tied to
+    #    # the release.
+    #
+    #    # Apparently envsubst can't handle bash arrays or dicts.
+    #    SHA256=${DIGEST[cc65-binaries.tar.xz]} envsubst \
+    #            <toolchains/foo/repository.bzl.template \
+    #            >toolchains/foo/repository.bzl
+    #
+    #    # Update modified hashes.
+    #    git commit -m "Update tags and hashes for ${RELEASE_TAG}" \
+    #            toolchains/foo/repository.bzl
+    #
+    #    # Move the tag after the commit.
+    #    git tag -f "${RELEASE_TAG}"
+    #
+    #    # Push the updated commit and tag to the remote.
+    #    git push --atomic "${REMOTE}" "${BRANCH}" "${RELEASE_TAG}"
+    #)""",
 )

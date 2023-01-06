@@ -16,3 +16,10 @@ lowrisc_deps()
 
 load("//third_party/yosyshq:repos.bzl", "yosyshq_src_repos")
 yosyshq_src_repos()
+
+# FIXME: delegate this to a deps file
+load("//toolchains/yosys:repository.bzl", "yosyshq_repos")
+yosyshq_repos()
+
+# FIXME: delegate this to a deps file
+register_toolchains("//toolchains/yosys/ice40:ice40")
