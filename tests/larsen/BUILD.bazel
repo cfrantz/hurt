@@ -5,12 +5,25 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//verilog:verilog.bzl", "verilog_bitstream")
+load("//fpga/lattice:constraints.bzl", "ecp5_constraints", "ice40_constraints")
+
+ice40_constraints(
+    name = "ice40",
+    device = "hx8k",
+    package = "ct256",
+    pcf = "pinmap_ice40_hx8k_evb.pcf",
+)
+
+ecp5_constraints(
+    name = "ecp5",
+    device = "um5g-85k",
+    lpf = "pinmap_lattice_ecp5_evb.lpf",
+    package = "CABGA381",
+)
 
 verilog_bitstream(
     name = "larsen",
     srcs = ["larsen.v"],
-    constraints = "pinmap_ice40_hx8k_evb.pcf",
-    device = "hx8k",
-    package = "ct256",
+    constraints = ":ecp5",
     top = "top",
 )

@@ -5,6 +5,7 @@
 exports_files(
     glob(["*.bzl"]),
     visibility = [
+        "//fpga:__subpackages__",
         "//toolchains:__subpackages__",
         "//verilog:__pkg__",
     ],

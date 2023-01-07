@@ -2,12 +2,12 @@
 # Licensed under the Apache License, Version 2.0, see LICENSE for details.
 # SPDX-License-Identifier: Apache-2.0
 
-load("//verilog/private:toolchain.bzl", "VerilogRuleHelpers")
 load("//verilog/private:constraints.bzl", "VerilogConstraintsInfo")
+load("//verilog/private:toolchain.bzl", "VerilogRuleHelpers")
 load("//verilog/private:library.bzl", "default_verilog_library_impl", "get_transitive_srcs")
 load("//toolchains/yosys:yosys.bzl", "yosys_synth")
 
-def _ice40_bitstream(ctx, toolchain):
+def _ecp5_bitstream(ctx, toolchain):
     synth = ctx.actions.declare_file("{}.yosys.json".format(ctx.attr.name))
     srcs = get_transitive_srcs(ctx.files.srcs, ctx.attr.deps)
     defines = ["-D{}".format(d) for d in ctx.attr.defines]
@@ -15,7 +15,7 @@ def _ice40_bitstream(ctx, toolchain):
         ctx,
         toolchain.tools.yosys,
         synth,
-        "synth_ice40",
+        "synth_ecp5",
         ctx.attr.top,
         srcs.to_list(),
         defines,
@@ -32,9 +32,9 @@ def _ice40_bitstream(ctx, toolchain):
             constraints.package,
             "--json",
             synth.path,
-            "--pcf",
+            "--lpf",
             constraints.pinmap.path,
-            "--asc",
+            "--textcfg",
             pnr.path,
         ],
         executable = toolchain.tools.nextpnr.binary,
@@ -42,14 +42,19 @@ def _ice40_bitstream(ctx, toolchain):
     )
 
     bit = ctx.actions.declare_file("{}.bit".format(ctx.attr.name))
+    svf = ctx.actions.declare_file("{}.svf".format(ctx.attr.name))
     ctx.actions.run(
-        outputs = [bit],
-        inputs = [pnr] + toolchain.tools.icepack.deps,
+        outputs = [bit, svf],
+        inputs = [pnr] + toolchain.tools.ecppack.deps,
         arguments = [
+            "--input",
             pnr.path,
+            "--bit",
             bit.path,
+            "--svf",
+            svf.path,
         ],
-        executable = toolchain.tools.icepack.binary,
+        executable = toolchain.tools.ecppack.binary,
         mnemonic = "PackBitstream",
     )
 
@@ -57,18 +62,19 @@ def _ice40_bitstream(ctx, toolchain):
         DefaultInfo(files = depset([bit])),
         OutputGroupInfo(
             bitstream = depset([bit]),
+            svf = depset([svf]),
             pnr = depset([pnr]),
             synthesis = depset([synth]),
         ),
     ]
 
-def _yosys_ice40_helper(ctx):
+def _yosys_ecp5_helper(ctx):
     return [VerilogRuleHelpers(
         library = default_verilog_library_impl,
-        bitstream = _ice40_bitstream,
+        bitstream = _ecp5_bitstream,
     )]
 
-yosys_ice40_helper = rule(
-    implementation = _yosys_ice40_helper,
+yosys_ecp5_helper = rule(
+    implementation = _yosys_ecp5_helper,
     provides = [VerilogRuleHelpers],
 )

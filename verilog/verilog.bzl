@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 load("//verilog/private:library.bzl", "VerilogSrcs")
+load("//verilog/private:constraints.bzl", "VerilogConstraintsInfo")
 load("//verilog/private:toolchain.bzl", "VERILOG_TOOLCHAIN")
 
 def _verilog_library_impl(ctx):
@@ -35,9 +36,7 @@ verilog_bitstream = rule(
         "srcs": attr.label_list(allow_files = True, doc = "Verilog source files"),
         "deps": attr.label_list(providers = [VerilogSrcs], doc = "Additional verilog library dependencies"),
         "defines": attr.string_list(doc = "Defines"),
-        "device": attr.string(mandatory = True, doc = "Name of the target device"),
-        "package": attr.string(mandatory = True, doc = "Package type of target device"),
-        "constraints": attr.label(mandatory = True, allow_single_file = True, doc = "Pinmap/constraints file"),
+        "constraints": attr.label(mandatory = True, providers = [VerilogConstraintsInfo], doc = "Constraints"),
     },
     toolchains = [VERILOG_TOOLCHAIN],
 )

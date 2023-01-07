@@ -23,3 +23,4 @@ yosyshq_repos()
 
 # FIXME: delegate this to a deps file
 register_toolchains("//toolchains/yosys/ice40:ice40")
+register_toolchains("//toolchains/yosys/ecp5:ecp5")

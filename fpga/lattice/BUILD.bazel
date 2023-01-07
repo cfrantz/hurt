@@ -24,3 +24,10 @@ platform(
         ":ice40",
     ],
 )
+
+platform(
+    name = "um5g-85k",
+    constraint_values = [
+        ":ecp5",
+    ],
+)
