@@ -16,6 +16,8 @@ lowrisc_deps()
 
 load("//third_party/yosyshq:repos.bzl", "yosyshq_src_repos")
 yosyshq_src_repos()
+load("//third_party/verilator:repos.bzl", "verilator_src_repos")
+verilator_src_repos()
 
 # FIXME: delegate this to a deps file
 load("//toolchains/yosys:repository.bzl", "yosyshq_repos")
