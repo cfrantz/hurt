@@ -24,6 +24,9 @@ ecp5_constraints(
 verilog_bitstream(
     name = "larsen",
     srcs = ["larsen.v"],
-    constraints = ":ecp5",
+    constraints = select({
+        "//fpga/lattice:ice40": ":ice40",
+        "//fpga/lattice:ecp5": ":ecp5",
+    }),
     top = "top",
 )

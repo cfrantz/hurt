@@ -10,7 +10,7 @@ def ice40_constraints(name, device, package, pcf):
         device = device,
         package = package,
         pinmap = pcf,
-        target_compatible_with = [ "//fpga/lattice:ice40" ],
+        target_compatible_with = ["//fpga/lattice:ice40"],
     )
 
 def ecp5_constraints(name, device, package, lpf):
@@ -19,5 +19,5 @@ def ecp5_constraints(name, device, package, lpf):
         device = device,
         package = package,
         pinmap = lpf,
-        target_compatible_with = [ "//fpga/lattice:ecp5" ],
+        target_compatible_with = ["//fpga/lattice:ecp5"],
     )

@@ -5,6 +5,7 @@
 load("//verilog/private:library.bzl", "VerilogSrcs")
 load("//verilog/private:constraints.bzl", "VerilogConstraintsInfo")
 load("//verilog/private:toolchain.bzl", "VERILOG_TOOLCHAIN")
+load("//util:transition.bzl", "platform_transition")
 
 def _verilog_library_impl(ctx):
     tc = ctx.toolchains[VERILOG_TOOLCHAIN]
@@ -37,6 +38,9 @@ verilog_bitstream = rule(
         "deps": attr.label_list(providers = [VerilogSrcs], doc = "Additional verilog library dependencies"),
         "defines": attr.string_list(doc = "Defines"),
         "constraints": attr.label(mandatory = True, providers = [VerilogConstraintsInfo], doc = "Constraints"),
+        "platform": attr.string(doc = "Target platform"),
+        "_allowlist_function_transition": attr.label(default = "@bazel_tools//tools/allowlists/function_transition_allowlist"),
     },
+    cfg = platform_transition,
     toolchains = [VERILOG_TOOLCHAIN],
 )
