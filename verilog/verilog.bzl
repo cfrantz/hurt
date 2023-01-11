@@ -23,15 +23,15 @@ verilog_library = rule(
     toolchains = [VERILOG_TOOLCHAIN],
 )
 
-def _verilog_bitstream_impl(ctx):
+def _verilog_binary_impl(ctx):
     tc = ctx.toolchains[VERILOG_TOOLCHAIN]
 
     # This will usually be the toolchain-provided bitstream flow, such as
     # //toolchains/yosys/ice40/implementation.bzl%_ice40_bitstream.
     return tc.helper.bitstream(ctx, tc)
 
-verilog_bitstream = rule(
-    implementation = _verilog_bitstream_impl,
+verilog_binary = rule(
+    implementation = _verilog_binary_impl,
     attrs = {
         "top": attr.string(mandatory = True, doc = "Name of the top module"),
         "srcs": attr.label_list(allow_files = True, doc = "Verilog source files"),
