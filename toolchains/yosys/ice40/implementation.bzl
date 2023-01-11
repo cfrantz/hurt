@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0, see LICENSE for details.
 # SPDX-License-Identifier: Apache-2.0
 
-load("//verilog/private:toolchain.bzl", "VerilogRuleHelpers")
-load("//verilog/private:constraints.bzl", "VerilogConstraintsInfo")
-load("//verilog/private:library.bzl", "default_verilog_library_impl", "get_transitive_srcs")
+load("//hdl/private:toolchain.bzl", "HdlRuleHelpers")
+load("//hdl/private:constraints.bzl", "HdlConstraintsInfo")
+load("//hdl/private:library.bzl", "default_hdl_library_impl", "get_transitive_srcs")
 load("//toolchains/yosys:yosys.bzl", "yosys_synth")
 
 def _ice40_bitstream(ctx, toolchain):
@@ -21,7 +21,7 @@ def _ice40_bitstream(ctx, toolchain):
         defines + ctx.attr.tool_options.get("yosys", []),
     )
 
-    constraints = ctx.attr.constraints[VerilogConstraintsInfo]
+    constraints = ctx.attr.constraints[HdlConstraintsInfo]
     pnr = ctx.actions.declare_file("{}.pnr.asc".format(ctx.attr.name))
     ctx.actions.run(
         outputs = [pnr],
@@ -63,12 +63,12 @@ def _ice40_bitstream(ctx, toolchain):
     ]
 
 def _yosys_ice40_helper(ctx):
-    return [VerilogRuleHelpers(
-        library = default_verilog_library_impl,
-        bitstream = _ice40_bitstream,
+    return [HdlRuleHelpers(
+        library = default_hdl_library_impl,
+        binary = _ice40_bitstream,
     )]
 
 yosys_ice40_helper = rule(
     implementation = _yosys_ice40_helper,
-    provides = [VerilogRuleHelpers],
+    provides = [HdlRuleHelpers],
 )

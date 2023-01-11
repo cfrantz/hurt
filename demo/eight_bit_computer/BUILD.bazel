@@ -4,7 +4,7 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("//verilog:verilog.bzl", "verilog_binary")
+load("//hdl:hdl.bzl", "hdl_binary")
 load("//fpga/lattice:constraints.bzl", "ice40_constraints")
 
 ice40_constraints(
@@ -14,7 +14,7 @@ ice40_constraints(
     pcf = "pinmap_ice40_hx8k_evb.pcf",
 )
 
-verilog_binary(
+hdl_binary(
     name = "machine",
     srcs = ["machine.v"],
     constraints = ":ice40",

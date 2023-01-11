@@ -2,10 +2,10 @@
 # Licensed under the Apache License, Version 2.0, see LICENSE for details.
 # SPDX-License-Identifier: Apache-2.0
 
-load("//verilog/private:constraints.bzl", "verilog_constraints")
+load("//hdl/private:constraints.bzl", "hdl_constraints")
 
 def ice40_constraints(name, device, package, pcf):
-    verilog_constraints(
+    hdl_constraints(
         name = name,
         device = device,
         package = package,
@@ -14,7 +14,7 @@ def ice40_constraints(name, device, package, pcf):
     )
 
 def ecp5_constraints(name, device, package, lpf):
-    verilog_constraints(
+    hdl_constraints(
         name = name,
         device = device,
         package = package,

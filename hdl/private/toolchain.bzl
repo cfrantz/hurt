@@ -2,48 +2,48 @@
 # Licensed under the Apache License, Version 2.0, see LICENSE for details.
 # SPDX-License-Identifier: Apache-2.0
 
-VERILOG_TOOLCHAIN = "@hurt//verilog:toolchain"
+HDL_TOOLCHAIN = "@hurt//hdl:toolchain"
 
-VerilogRuleHelpers = provider(fields = ["bitstream", "library"])
+HdlRuleHelpers = provider(fields = ["binary", "library"])
 
-VerilogToolInfo = provider(fields = ["name", "binary", "deps"])
-VerilogToolsInfo = provider()
+HdlToolInfo = provider(fields = ["name", "binary", "deps"])
+HdlToolsInfo = provider()
 
-def _verilog_tool_impl(ctx):
-    return [VerilogToolInfo(
+def _hdl_tool_impl(ctx):
+    return [HdlToolInfo(
         name = ctx.attr.name,
         binary = ctx.file.binary,
         deps = ctx.files.deps,
     )]
 
-verilog_tool = rule(
-    implementation = _verilog_tool_impl,
+hdl_tool = rule(
+    implementation = _hdl_tool_impl,
     attrs = {
         "binary": attr.label(allow_single_file = True, doc = "The binary of this tool"),
         "deps": attr.label_list(allow_files = True, doc = "The file dependencies needed to run the binary"),
     },
 )
 
-def _verilog_toolchain_impl(ctx):
-    tool_providers = [t[VerilogToolInfo] for t in ctx.attr.tools]
+def _hdl_toolchain_impl(ctx):
+    tool_providers = [t[HdlToolInfo] for t in ctx.attr.tools]
     tools = {t.name: t for t in tool_providers}
-    tools = VerilogToolsInfo(**tools)
+    tools = HdlToolsInfo(**tools)
 
     return [platform_common.ToolchainInfo(
         name = ctx.label.name,
-        helper = ctx.attr.helper[VerilogRuleHelpers],
+        helper = ctx.attr.helper[HdlRuleHelpers],
         tools = tools,
     )]
 
-verilog_toolchain = rule(
-    implementation = _verilog_toolchain_impl,
+hdl_toolchain = rule(
+    implementation = _hdl_toolchain_impl,
     attrs = {
-        "helper": attr.label(providers = [VerilogRuleHelpers], doc = "Per-toolchain helper routines", mandatory = True),
+        "helper": attr.label(providers = [HdlRuleHelpers], doc = "Per-toolchain helper routines", mandatory = True),
         "tools": attr.label_list(
-            providers = [VerilogToolInfo],
+            providers = [HdlToolInfo],
             doc = "Mapping of tool binaries to their high-level tool name",
         ),
     },
-    doc = "Defines a verilog toolchain",
+    doc = "Defines a hdl toolchain",
     provides = [platform_common.ToolchainInfo],
 )

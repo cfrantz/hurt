@@ -4,7 +4,7 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("//verilog:verilog.bzl", "verilog_binary")
+load("//hdl:hdl.bzl", "hdl_binary")
 load("//fpga/lattice:constraints.bzl", "ecp5_constraints", "ice40_constraints")
 
 ice40_constraints(
@@ -21,7 +21,7 @@ ecp5_constraints(
     package = "CABGA381",
 )
 
-verilog_binary(
+hdl_binary(
     name = "larsen",
     srcs = ["larsen.v"],
     constraints = select({

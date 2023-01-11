@@ -4,31 +4,31 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("//verilog/private:toolchain.bzl", "VERILOG_TOOLCHAIN", "verilog_tool", "verilog_toolchain")
+load("//hdl/private:toolchain.bzl", "HDL_TOOLCHAIN", "hdl_tool", "hdl_toolchain")
 load(":implementation.bzl", "yosys_ice40_helper")
 
 yosys_ice40_helper(
     name = "helper",
 )
 
-verilog_tool(
+hdl_tool(
     name = "yosys",
     binary = "@yosyshq//:yosys_bin",
     deps = ["@yosyshq//:yosys_files"],
 )
 
-verilog_tool(
+hdl_tool(
     name = "nextpnr",
     binary = "@yosyshq//:nextpnr_ice40",
 )
 
-verilog_tool(
+hdl_tool(
     name = "icepack",
     binary = "@yosyshq//:icepack_bin",
     deps = ["@yosyshq//:icestorm_files"],
 )
 
-verilog_toolchain(
+hdl_toolchain(
     name = "ice40_impl",
     helper = ":helper",
     tools = [
@@ -48,5 +48,5 @@ toolchain(
         "//fpga/lattice:ice40",
     ],
     toolchain = ":ice40_impl",
-    toolchain_type = VERILOG_TOOLCHAIN,
+    toolchain_type = HDL_TOOLCHAIN,
 )

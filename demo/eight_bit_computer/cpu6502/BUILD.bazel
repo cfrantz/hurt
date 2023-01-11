@@ -4,9 +4,9 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("//verilog:verilog.bzl", "verilog_library")
+load("//hdl:hdl.bzl", "hdl_library")
 
-verilog_library(
+hdl_library(
     name = "cpu6502",
     srcs = [
         "alu.v",
