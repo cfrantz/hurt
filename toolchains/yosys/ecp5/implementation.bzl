@@ -18,7 +18,7 @@ def _ecp5_bitstream(ctx, toolchain):
         "synth_ecp5",
         ctx.attr.top,
         srcs.to_list(),
-        defines,
+        defines + ctx.attr.tool_options.get("yosys", []),
     )
 
     constraints = ctx.attr.constraints[VerilogConstraintsInfo]
@@ -36,7 +36,7 @@ def _ecp5_bitstream(ctx, toolchain):
             constraints.pinmap.path,
             "--textcfg",
             pnr.path,
-        ],
+        ] + ctx.attr.tool_options.get("nextpnr", []),
         executable = toolchain.tools.nextpnr.binary,
         mnemonic = "PlaceAndRoute",
     )
@@ -53,7 +53,7 @@ def _ecp5_bitstream(ctx, toolchain):
             bit.path,
             "--svf",
             svf.path,
-        ],
+        ] + ctx.attr.tool_options.get("ecppack", []),
         executable = toolchain.tools.ecppack.binary,
         mnemonic = "PackBitstream",
     )

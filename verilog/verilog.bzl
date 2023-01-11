@@ -39,6 +39,7 @@ verilog_bitstream = rule(
         "defines": attr.string_list(doc = "Defines"),
         "constraints": attr.label(mandatory = True, providers = [VerilogConstraintsInfo], doc = "Constraints"),
         "platform": attr.string(doc = "Target platform"),
+        "tool_options": attr.string_list_dict(doc = "Per-tool options for the synthesis flow"),
         "_allowlist_function_transition": attr.label(default = "@bazel_tools//tools/allowlists/function_transition_allowlist"),
     },
     cfg = platform_transition,

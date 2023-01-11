@@ -18,7 +18,7 @@ def _ice40_bitstream(ctx, toolchain):
         "synth_ice40",
         ctx.attr.top,
         srcs.to_list(),
-        defines,
+        defines + ctx.attr.tool_options.get("yosys", []),
     )
 
     constraints = ctx.attr.constraints[VerilogConstraintsInfo]
@@ -36,7 +36,7 @@ def _ice40_bitstream(ctx, toolchain):
             constraints.pinmap.path,
             "--asc",
             pnr.path,
-        ],
+        ] + ctx.attr.tool_options.get("nextpnr", []),
         executable = toolchain.tools.nextpnr.binary,
         mnemonic = "PlaceAndRoute",
     )
@@ -48,7 +48,7 @@ def _ice40_bitstream(ctx, toolchain):
         arguments = [
             pnr.path,
             bit.path,
-        ],
+        ] + ctx.attr.tool_options.get("icepack", []),
         executable = toolchain.tools.icepack.binary,
         mnemonic = "PackBitstream",
     )
