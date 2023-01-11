@@ -1,0 +1,35 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("//verilog:verilog.bzl", "verilog_bitstream")
+load("//fpga/lattice:constraints.bzl", "ice40_constraints")
+
+ice40_constraints(
+    name = "ice40",
+    device = "hx8k",
+    package = "ct256",
+    pcf = "pinmap_ice40_hx8k_evb.pcf",
+)
+
+verilog_bitstream(
+    name = "machine",
+    srcs = ["machine.v"],
+    constraints = ":ice40",
+    platform = "//fpga/lattice:hx8k",
+    tool_options = {
+        # As discussed in the README, this demonstration contains poor
+        # verilog code.  In order to pass the place-and-route stage, we
+        # need to force nextpnr to ignore problems.
+        "nextpnr": ["--force"],
+    },
+    top = "machine",
+    deps = [
+        "//demo/eight_bit_computer/cpu6502",
+        "//demo/eight_bit_computer/ram",
+        "//demo/eight_bit_computer/rom",
+        "//demo/eight_bit_computer/uart",
+    ],
+)
