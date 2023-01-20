@@ -6,6 +6,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_foreign_cc//foreign_cc:configure.bzl", "configure_make")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_mkdirs", "pkg_mklink")
 
 filegroup(
     name = "all_srcs",
@@ -14,8 +15,12 @@ filegroup(
 
 configure_make(
     name = "verilator",
+    args = ["-j"],
     autoconf = True,
     configure_in_place = True,
+    configure_options = [
+        "--disable-defenv",
+    ],
     lib_source = ":all_srcs",
     out_binaries = [
         "verilator",
@@ -29,8 +34,46 @@ filegroup(
 )
 
 pkg_tar(
-    name = "verilator-binaries",
+    name = "build-results",
     srcs = [":gen_dir"],
-    extension = "tar.xz",
     strip_prefix = "external/verilator_src/copy_verilator",
+)
+
+# FIXME(cfrantz): This two-stage packaging is necessary because
+# the subdirs within `:gen_dir` are read-only, and thus the fixups
+# we want to perform (the extra symlinks) cannot be written to
+# their target directories.
+#
+# If we instead create an archive with just the fixups and then
+# overlay the contents of `gen_dir` onto it, we'll get an appropriate
+# arrangement of permissions.
+pkg_tar(
+    name = "verilator-binaries",
+    srcs = [
+        ":bin",
+        ":include",
+        ":verilator_includer",
+    ],
+    extension = "tar.xz",
+    deps = [":build-results"],
+)
+
+pkg_mkdirs(
+    name = "bin",
+    attributes = pkg_attributes(mode = "755"),
+    dirs = [
+        "verilator/bin",
+    ],
+)
+
+pkg_mklink(
+    name = "include",
+    link_name = "verilator/include",
+    target = "share/verilator/include",
+)
+
+pkg_mklink(
+    name = "verilator_includer",
+    link_name = "verilator/bin/verilator_includer",
+    target = "../share/verilator/bin/verilator_includer",
 )
