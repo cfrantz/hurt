@@ -1,2 +1,6 @@
+# Enable toolchain resolution with cc
+build --incompatible_enable_cc_toolchain_resolution
+
+# Use C++14
 build --cxxopt='-std=c++14'
 build --action_env=BAZEL_CXXOPTS="-std=c++14"

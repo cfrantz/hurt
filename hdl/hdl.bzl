@@ -6,6 +6,7 @@ load("//hdl/private:library.bzl", "HdlSourceInfo")
 load("//hdl/private:constraints.bzl", "HdlConstraintsInfo")
 load("//hdl/private:toolchain.bzl", "HDL_TOOLCHAIN")
 load("//util:transition.bzl", "platform_transition")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "CPP_TOOLCHAIN_TYPE")
 
 def _hdl_library_impl(ctx):
     tc = ctx.toolchains[HDL_TOOLCHAIN]
@@ -43,5 +44,13 @@ hdl_binary = rule(
         "_allowlist_function_transition": attr.label(default = "@bazel_tools//tools/allowlists/function_transition_allowlist"),
     },
     cfg = platform_transition,
-    toolchains = [HDL_TOOLCHAIN],
+    fragments = ["cpp"],
+    toolchains = [
+        config_common.toolchain_type(HDL_TOOLCHAIN, mandatory = True),
+        # Some of the simulators (verilator) require local tools like `make`
+        # and the C compiler.
+        config_common.toolchain_type(CPP_TOOLCHAIN_TYPE, mandatory = False),
+        config_common.toolchain_type("@rules_foreign_cc//toolchains:make_toolchain", mandatory = False),
+        config_common.toolchain_type("@rules_foreign_cc//foreign_cc/private/framework:shell_toolchain", mandatory = False),
+    ],
 )

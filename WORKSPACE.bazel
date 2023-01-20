@@ -22,7 +22,10 @@ verilator_src_repos()
 # FIXME: delegate this to a deps file
 load("//toolchains/yosys:repository.bzl", "yosyshq_repos")
 yosyshq_repos()
+load("//toolchains/verilator:repository.bzl", "verilator_repos")
+verilator_repos()
 
 # FIXME: delegate this to a deps file
 register_toolchains("//toolchains/yosys/ice40:ice40")
 register_toolchains("//toolchains/yosys/ecp5:ecp5")
+register_toolchains("//toolchains/verilator:verilator")

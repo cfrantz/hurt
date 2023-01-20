@@ -1,0 +1,39 @@
+# Copyright lowRISC contributors.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+package(default_visibility = ["//visibility:public"])
+
+load("//hdl/private:toolchain.bzl", "HDL_TOOLCHAIN", "hdl_tool", "hdl_toolchain")
+load(":implementation.bzl", "verilator_helper")
+
+verilator_helper(
+    name = "helper",
+)
+
+hdl_tool(
+    name = "verilator_bin",
+    binary = "@verilator//:verilator_bin",
+    deps = ["@verilator//:verilator_files"],
+)
+
+hdl_toolchain(
+    name = "verilator_impl",
+    helper = ":helper",
+    tools = [
+        ":verilator_bin",
+    ],
+)
+
+toolchain(
+    name = "verilator",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "//simulator:verilator",
+    ],
+    toolchain = ":verilator_impl",
+    toolchain_type = HDL_TOOLCHAIN,
+)
