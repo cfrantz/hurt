@@ -30,5 +30,25 @@ filegroup(
         ],
     ),
 )
+
+cc_library(
+    name = "includes",
+    includes = [
+        "include",
+        "include/vltstd",
+    ],
+    defines = [
+        "FST_CONFIG_INCLUDE=<gtkwave/fst_config.h>",
+    ],
+    hdrs = glob([
+        "include/*.h",
+        "include/gtkwave/*.h",
+        "include/gtkwave/*.c",
+        "include/vltstd/*.h",
+    ]),
+    srcs = glob([
+        "include/*.cpp",
+    ]),
+)
 """,
     )

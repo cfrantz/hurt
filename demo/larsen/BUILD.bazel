@@ -36,3 +36,36 @@ hdl_binary(
     }),
     top = "top",
 )
+
+hdl_binary(
+    name = "larsen2",
+    srcs = [
+        "larsen.v",
+    ] + select({
+        "//simulator:verilator": ["sim_main.cpp"],
+        "//conditions:default": [],
+    }),
+    constraints = select({
+        "//fpga/lattice:ice40": ":ice40",
+        "//fpga/lattice:ecp5": ":ecp5",
+        "//simulator:verilator": "//simulator:default",
+    }),
+    tool_options = {
+        "verilator": [
+            "--cc",
+            "--build",
+            "-j",
+        ],
+        "simulator": ["Vlarsen__ALL.a"],
+    },
+    top = "top",
+)
+
+cc_binary(
+    name = "sim_main",
+    srcs = ["sim_main.cpp"],
+    deps = [
+        ":larsen2",
+        "@verilator//:includes",
+    ],
+)

@@ -67,19 +67,70 @@ def _verilator_binary(ctx, toolchain):
     srcfiles = srcs.to_list()
     constraints = ctx.attr.constraints[HdlConstraintsInfo]
 
-    simulator = ctx.actions.declare_file(ctx.attr.name)
     out_dir = ctx.actions.declare_directory("{}.verilated".format(ctx.attr.name))
-
+    verilator_args = ctx.attr.tool_options.get("verilator", DEFAULT_VERILATOR_ARGS)
+    outputs = [out_dir]
     args = []
     args.extend(ctx.attr.tool_options.get("verilator", DEFAULT_VERILATOR_ARGS))
     args.extend(["--Mdir", out_dir.path])
-    args.extend(["-o", "../{}".format(ctx.attr.name)])
     args.extend(["-D{}".format(d) for d in ctx.attr.defines])
-    args.extend([src.path for src in srcfiles])
 
+    groups = {}
+    if "--main" in verilator_args or "--exe" in verilator_args:
+        simulator = ctx.attr.tool_options.get("simulator", ["{name}"])
+        simulator = simulator[0].format(name = ctx.attr.name)
+        out = ctx.actions.declare_file(simulator)
+        outputs.append(out)
+        args.extend(["-o", "../{}".format(simulator)])
+        groups["binary"] = depset([out])
+        cc_info = []
+    else:
+        simulator = ctx.attr.tool_options.get("simulator", ["V{name}__ALL.a"])
+        simulator = simulator[0].format(name = ctx.attr.name)
+        out = ctx.actions.declare_file("{}/{}".format(out_dir.basename, simulator))
+        outputs.append(out)
+        groups["library"] = depset([out])
+
+        compilation_info = cc_common.create_compilation_context(
+            headers = depset([out_dir]),
+            system_includes = depset([out_dir.path]),
+            includes = depset([]),
+            quote_includes = depset([]),
+        )
+        features = cc_common.configure_features(
+            ctx = ctx,
+            cc_toolchain = cc,
+            requested_features = ctx.features,
+            unsupported_features = ctx.disabled_features + [
+                "fdo_instrument",
+                "fdo_optimize",
+                "layering_check",
+                "module_maps",
+                "thin_lto",
+            ],
+        )
+        linking_info = cc_common.create_linking_context(
+            linker_inputs = depset(direct = [
+                cc_common.create_linker_input(
+                    owner = ctx.label,
+                    libraries = depset(direct = [cc_common.create_library_to_link(
+                        actions = ctx.actions,
+                        feature_configuration = features,
+                        cc_toolchain = cc,
+                        static_library = out,
+                    )]),
+                ),
+            ]),
+        )
+        cc_info = [CcInfo(
+            compilation_context = compilation_info,
+            linking_context = linking_info,
+        )]
+
+    args.extend([src.path for src in srcfiles])
     build_script = _verilator_script(ctx, make)
     ctx.actions.run(
-        outputs = [out_dir, simulator],
+        outputs = outputs,
         inputs = srcs,
         tools = depset(
             [build_script] +
@@ -92,14 +143,13 @@ def _verilator_binary(ctx, toolchain):
         mnemonic = "Verilator",
     )
 
+    groups["gen_dir"] = depset([out_dir])
+    groups["build_script"] = depset([build_script])
+
     return [
-        DefaultInfo(files = depset([simulator])),
-        OutputGroupInfo(
-            binary = depset([simulator]),
-            gen_dir = depset([out_dir]),
-            build_script = depset([build_script]),
-        ),
-    ]
+        DefaultInfo(files = depset([out])),
+        OutputGroupInfo(**groups),
+    ] + cc_info
 
 def _verilator_helper(ctx):
     return [HdlRuleHelpers(

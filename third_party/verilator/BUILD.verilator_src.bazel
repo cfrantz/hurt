@@ -15,7 +15,7 @@ filegroup(
 
 configure_make(
     name = "verilator",
-    args = ["-j"],
+    args = ["-j4"],
     autoconf = True,
     configure_in_place = True,
     configure_options = [
