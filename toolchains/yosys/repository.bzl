@@ -8,8 +8,8 @@ def yosyshq_repos():
     tools_repository(
         name = "yosyshq",
         #archive = "@hurt//prebuilt:yosyshq-tools.tar.xz",
-        url = "https://github.com/cfrantz/hurt/releases/download/v0.0.1/yosyshq-tools.tar.xz",
-        sha256 = "4417bdd5dfb26b0cbaa5ecb983d27e555dd393987415df04c497aca14f262866",
+        url = "https://github.com/cfrantz/hurt/releases/download/v0.0.2-tools/yosyshq-tools.tar.xz",
+        sha256 = "766a0457d890c71884db8fd430d62d6e5013a5f6dc8b613e369516d2115e52f7",
         strip_prefix = "yosyshq",
         build_file_content = """
 package(default_visibility = ["//visibility:public"])
