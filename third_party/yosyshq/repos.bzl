@@ -13,7 +13,7 @@ def yosyshq_src_repos():
     git_repository(
         name = "yosys_src",
         remote = "https://github.com/cfrantz/yosys.git",
-        commit = "90f5d3648d53d442445da6e7251e4435ea59818b",
+        commit = "960b42993b2cec64a7d884fa8d0c11b3a864bae2",
         build_file = Label("//third_party/yosyshq:BUILD.yosys_src.bazel"),
         recursive_init_submodules = True,
         patches = [
@@ -25,7 +25,7 @@ def yosyshq_src_repos():
     git_repository(
         name = "nextpnr_src",
         remote = "https://github.com/YosysHQ/nextpnr.git",
-        commit = "3ea3a931ca2b9b7228bf241a3fd6cbf861e40696",
+        commit = "edcafcf085aa0ee65f1cf01dd5f33d877777f911",
         build_file = Label("//third_party/yosyshq:BUILD.nextpnr_src.bazel"),
         recursive_init_submodules = True,
     )
@@ -33,14 +33,14 @@ def yosyshq_src_repos():
     git_repository(
         name = "icestorm_src",
         remote = "https://github.com/YosysHQ/icestorm.git",
-        commit = "a545498d6fd0a28a006976293917115037d4628c",
+        commit = "1a40ae75d4eebee9cce73a2c4d634fd42ed0110f",
         build_file = Label("//third_party/yosyshq:BUILD.icestorm_src.bazel"),
     )
 
     git_repository(
         name = "trellis_src",
         remote = "https://github.com/YosysHQ/prjtrellis.git",
-        commit = "35f5affe10a2995bdace49e23fcbafb5723c5347",
+        commit = "2dab0095e1a5691855b0955b329cb4946b6a13b8",
         build_file = Label("//third_party/yosyshq:BUILD.trellis_src.bazel"),
         recursive_init_submodules = True,
     )
